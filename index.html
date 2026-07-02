@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharco Brand Perception Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F4EF;
+    --ink:#0D0D0D;
+    --muted:#847C72;
+    --border:#D8D0C4;
+    --card:#FFFFFF;
+    --accent:#FFA400;      /* Pantone 137C */
+    --accent-ink:#0D0D0D;
+    --grey2:#50494E;       /* Cool Grey 10C */
+    --req:#C0442A;
+    --radius-card:20px;
+    --radius-input:12px;
+    --radius-pill:100px;
+    --shadow: 0 4px 24px rgba(13,13,13,.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Ubuntu',sans-serif;
+    font-size:16px;
+    line-height:1.5;
+  }
+  h1,h2,h3{ font-family:'Ubuntu',sans-serif; font-weight:800; margin:0; }
+
+  /* ---------- Header / hero ---------- */
+  .page-header{
+    background:var(--ink);
+    padding:44px 40px 36px;
+  }
+  .header-inner{ max-width:760px; margin:0 auto; }
+  .wordmark{
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .wordmark .mark{
+    width:34px;height:34px;border-radius:9px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:var(--accent-ink);font-size:16px;
+  }
+  .wordmark .name{ color:#fff;font-weight:800;font-size:18px;letter-spacing:.5px; }
+  .header-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--accent); color:var(--accent-ink);
+    border-radius:var(--radius-pill);
+    padding:6px 14px; font-size:11px; font-weight:700;
+    letter-spacing:2px; text-transform:uppercase; margin-bottom:18px;
+  }
+  .header-tag .dot{width:5px;height:5px;border-radius:50%;background:var(--accent-ink);}
+  h1.title{ color:#fff; font-size:40px; line-height:1.12; margin-bottom:14px; }
+  h1.title .accent{ color:var(--accent); }
+  .header-sub{ color:rgba(255,255,255,.65); font-size:15px; font-weight:300; max-width:540px; margin-bottom:26px; }
+
+  .progress-bar-wrap{
+    height:6px;width:100%;background:rgba(255,255,255,.12);border-radius:100px;overflow:hidden;
+  }
+  .progress-bar-fill{
+    height:100%;width:0%;background:var(--accent);border-radius:100px;
+    transition:width .25s ease;
+  }
+  .progress-label{ color:rgba(255,255,255,.55); font-size:12px; margin-top:10px; }
+
+  /* ---------- Body / form ---------- */
+  .form-wrap{ max-width:760px; margin:0 auto; padding:36px 20px 80px; }
+
+  .form-section{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow);
+    padding:30px 32px 28px;
+    margin-bottom:20px;
+    scroll-margin-top:24px;
+  }
+  .section-header{ display:flex; align-items:flex-start; gap:14px; margin-bottom:20px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+  .section-icon{
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+  }
+  .icon-orange{ background:#FFE7BE; }
+  .icon-grey{ background:#E7E4E6; }
+  .icon-teal{ background:#DFF0EE; }
+  .icon-rust{ background:#FDECEA; }
+  .icon-purple{ background:#EFEAFB; }
+  .section-title-group{ padding-top:2px; }
+  .section-label{ color:var(--muted); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+  .section-title{ font-size:20px; font-weight:800; }
+  .section-desc{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+  .field{ margin-bottom:20px; }
+  .field:last-child{ margin-bottom:0; }
+  label.flabel{ display:block; font-size:13px; font-weight:500; margin-bottom:8px; }
+  .req{ color:var(--req); }
+  .hint{ color:var(--muted); font-size:11px; margin-top:6px; }
+
+  input[type=text], input[type=email], select, textarea{
+    width:100%; background:var(--bg); border:1.5px solid var(--border);
+    border-radius:var(--radius-input); padding:12px 14px; font-size:14px;
+    font-family:'Ubuntu',sans-serif; color:var(--ink); outline:none;
+  }
+  input[type=text]:focus, select:focus, textarea:focus{ border-color:var(--accent); }
+  textarea{ resize:vertical; min-height:90px; }
+  select{ appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23847C72' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:600px){ .grid-2{ grid-template-columns:1fr; } }
+
+  .char-counter{ text-align:right; color:var(--muted); font-size:11px; margin-top:4px; }
+
+  /* pill choice group (single-select) */
+  .pill-group{ display:flex; flex-wrap:wrap; gap:10px; }
+  .radio-pill{
+    background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-pill);
+    padding:10px 18px; font-size:13px; cursor:pointer; user-select:none; transition:.15s;
+  }
+  .radio-pill:hover{ border-color:var(--accent); }
+  .radio-pill.active{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .other-reveal{ margin-top:12px; display:none; }
+  .other-reveal.show{ display:block; }
+
+  /* likert grid */
+  .likert{ width:100%; }
+  .likert-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); gap:16px; }
+  .likert-row:last-child{ border-bottom:none; }
+  .likert-row .lname{ font-size:14px; flex:1; min-width:0; }
+  .likert-scale{ display:flex; gap:10px; flex-shrink:0; }
+  .likert-opt{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; }
+  .likert-opt input{ width:18px;height:18px;accent-color:var(--accent); cursor:pointer; }
+  .likert-opt span{ font-size:10px; color:var(--muted); }
+  .likert-endcaps{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:2px; }
+
+  /* rank grid */
+  .rank-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); gap:14px; }
+  .rank-row:last-child{ border-bottom:none; }
+  .rank-row .lname{ font-size:14px; flex:1; }
+  .rank-row select{ width:150px; }
+
+  /* submit */
+  .submit-section{ text-align:center; padding:36px 20px 10px; }
+  .submit-title{ font-size:20px; font-weight:800; margin-bottom:8px; }
+  .submit-sub{ color:var(--muted); font-size:13px; margin-bottom:24px; }
+  .btn-submit{
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:var(--radius-pill);
+    padding:16px 40px; font-size:15px; font-weight:700; letter-spacing:.3px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:10px; font-family:'Ubuntu',sans-serif;
+  }
+  .btn-submit:disabled{ opacity:.6; cursor:default; }
+  .btn-arrow{ font-size:16px; }
+  .spinner{ width:14px;height:14px;border-radius:50%; border:2px solid rgba(13,13,13,.25); border-top-color:var(--accent-ink); animation:spin .7s linear infinite; display:none; }
+  .spinner.show{ display:inline-block; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:12px; margin-top:26px; }
+
+  .toast{
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:14px 22px; border-radius:12px;
+    font-size:14px; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:.25s;
+    max-width:90vw; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.error{ background:#C0442A; }
+
+  #formArea.hidden{ display:none; }
+  .success-panel{ display:none; text-align:center; padding:80px 20px; }
+  .success-panel.show{ display:block; }
+  .success-panel .big{ font-size:44px; margin-bottom:14px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-inner">
+    <div class="wordmark">
+      <div class="mark">P</div>
+      <div class="name">PHARCO</div>
+    </div>
+    <div class="header-tag"><span class="dot"></span>Brand Perception Survey</div>
+    <h1 class="title">Shape The Brand.<br>Share Your <span class="accent">Voice.</span></h1>
+    <div class="header-sub">5–7 minutes · Your perspective on Pharco's identity, positioning, and voice will directly inform the upcoming rebrand. Responses are confidential and used in aggregate.</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">Section 1 of 11</div>
+  </div>
+</div>
+
+<div class="form-wrap">
+  <form id="surveyForm">
+  <div id="formArea">
+
+    <!-- Section 1 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-orange">👤</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 1</div>
+          <div class="section-title">About You</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="flabel">Which Pharco Group entity do you primarily work for? <span class="req">*</span></label>
+          <select name="entity" required>
+            <option value="" disabled selected>Choose…</option>
+            <option>Pharco (Corporate/HQ)</option>
+            <option>Amriya</option>
+            <option>PharcoB</option>
+            <option>EEPI</option>
+            <option>Techno</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="flabel">What is your seniority level? <span class="req">*</span></label>
+          <select name="seniority" required>
+            <option value="" disabled selected>Choose…</option>
+            <option>Specialist</option>
+            <option>Sr Specialist</option>
+            <option>Lead</option>
+            <option>Manager</option>
+            <option>Sr Manager</option>
+            <option>Director</option>
+            <option>Executive</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">Which department best describes your role? <span class="req">*</span></label>
+        <select name="department" required>
+          <option value="" disabled selected>Choose…</option>
+          <option>Marketing</option>
+          <option>Sales & Commercial</option>
+          <option>Corporate Communications</option>
+          <option>HR & Talent</option>
+          <option>Regulatory Affairs</option>
+          <option>Medical & Scientific Affairs</option>
+          <option>Digital & E-commerce</option>
+          <option>Business Development & Export</option>
+          <option>Finance</option>
+          <option>Legal</option>
+          <option>IT</option>
+          <option>Executive Leadership</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-teal">📊</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 2</div>
+          <div class="section-title">Overall Brand Perception</div>
+          <div class="section-desc">Rate the following about Pharco's brand today</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["confidence:Confidence in it","consistency:Consistency","standsOut:Stands out from competitors","trustworthy:Trustworthy"]'></div>
+      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-rust">🎯</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 3</div>
+          <div class="section-title">Positioning</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">How is Pharco currently positioned, in your view? <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="positioning" data-required="true">
+          <div class="radio-pill" data-value="Affordable/generic option">Affordable/generic option</div>
+          <div class="radio-pill" data-value="High-quality manufacturer">High-quality manufacturer</div>
+          <div class="radio-pill" data-value="Innovator & health-equity partner">Innovator & health-equity partner</div>
+          <div class="radio-pill" data-value="No clear positioning">No clear positioning</div>
+          <div class="radio-pill" data-value="Other" data-other="true">Other…</div>
+        </div>
+        <div class="other-reveal" data-other-for="positioning">
+          <input type="text" name="positioningOther" placeholder="Please specify">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-purple">💬</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 4</div>
+          <div class="section-title">Messaging</div>
+          <div class="section-desc">Rate Pharco's current messaging</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["msgClear:Clear","msgConsistent:Consistent across channels","msgEmotional:Emotionally engaging","msgCredible:Credible"]'></div>
+      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-orange">🎨</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 5</div>
+          <div class="section-title">Visual Identity</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["knowLogo:I know the correct current logo, colors, and fonts to use for my entity."]'></div>
+      <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+
+      <div class="section-desc" style="margin-bottom:8px;">Rate consistency across the company of:</div>
+      <div class="likert" data-likert-group='["consistLogo:Logo usage","consistColor:Color palette","consistTemplates:Templates (PPT, docs)","consistDigital:Digital & social assets"]'></div>
+      <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Very Inconsistent</span><span>5 · Very Consistent</span></div>
+
+      <div class="field">
+        <label class="flabel">Have you ever used a template or asset you weren't sure was current/correct? <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="usedUnsureAsset" data-required="true">
+          <div class="radio-pill" data-value="Yes">Yes</div>
+          <div class="radio-pill" data-value="No">No</div>
+          <div class="radio-pill" data-value="Not sure">Not sure</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-grey">📘</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 6</div>
+          <div class="section-title">Brand Guidelines</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["knowGuidelines:I know where to find our brand guidelines, and they'\''re easy to use."]'></div>
+      <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+
+      <div class="field">
+        <label class="flabel">What brand resource are you missing most? <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="missingResource" data-required="true">
+          <div class="radio-pill" data-value="Logo/templates">Logo/templates</div>
+          <div class="radio-pill" data-value="Tone-of-voice guide">Tone-of-voice guide</div>
+          <div class="radio-pill" data-value="Clear approval process">Clear approval process</div>
+          <div class="radio-pill" data-value="Nothing missing">Nothing missing</div>
+          <div class="radio-pill" data-value="Other" data-other="true">Other…</div>
+        </div>
+        <div class="other-reveal" data-other-for="missingResource">
+          <input type="text" name="missingResourceOther" placeholder="Please specify">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-teal">🗣️</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 7</div>
+          <div class="section-title">Brand Voice &amp; Tone</div>
+          <div class="section-desc">Rate how much Pharco's communication currently sounds:</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["soundProfessional:Professional","soundHuman:Human & warm","soundInnovative:Innovative","soundTrustworthy:Trustworthy"]'></div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-rust">🏢</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 8</div>
+          <div class="section-title">Internal Communications</div>
+          <div class="section-desc">Rate how clear and consistent brand communication is from:</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["clearMarketing:Marketing","clearSales:Sales","clearHR:HR","clearLeadership:Leadership"]'></div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-purple">⚠️</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 9</div>
+          <div class="section-title">Pain Points</div>
+          <div class="section-desc">Rank your top obstacles — 1 = biggest, 4 = smallest</div>
+        </div>
+      </div>
+      <div class="rank-grid" data-rank-group='[["rankUnclear","Unclear guidelines"],["rankInconsistent","Inconsistent branding across companies"],["rankSlow","Slow approvals"],["rankMissing","Missing templates"]]'></div>
+
+      <div class="field" style="margin-top:20px;">
+        <div class="likert" data-likert-group='["approvalsFast:Approvals/sign-off on brand materials happen quickly enough."]'></div>
+        <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">I've had to recreate a document from scratch because no usable template existed. <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="recreatedDoc" data-required="true">
+          <div class="radio-pill" data-value="Yes">Yes</div>
+          <div class="radio-pill" data-value="No">No</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">In your own words: what's the single biggest obstacle to consistent branding at Pharco today? <span class="req">*</span></label>
+        <textarea name="biggestObstacle" maxlength="800" required data-counted></textarea>
+        <div class="char-counter"><span data-count-for="biggestObstacle">0</span>/800</div>
+      </div>
+    </div>
+
+    <!-- Section 10 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-orange">🚀</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 10</div>
+          <div class="section-title">Future Brand</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">In three words, describe the brand you want Pharco to become. <span class="req">*</span></label>
+        <input type="text" name="threeWords" placeholder="e.g. Bold, Trusted, Modern" required>
+      </div>
+      <div class="field">
+        <label class="flabel">If you had to pick ONE top priority for this rebrand, what would it be? <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="topPriority" data-required="true">
+          <div class="radio-pill" data-value="Unify visual identity">Unify visual identity</div>
+          <div class="radio-pill" data-value="Modernize look & feel">Modernize look &amp; feel</div>
+          <div class="radio-pill" data-value="Clarify positioning">Clarify positioning</div>
+          <div class="radio-pill" data-value="Simplify messaging">Simplify messaging</div>
+          <div class="radio-pill" data-value="Build usable guidelines">Build usable guidelines</div>
+          <div class="radio-pill" data-value="Improve internal comms">Improve internal comms</div>
+          <div class="radio-pill" data-value="Other" data-other="true">Other…</div>
+        </div>
+        <div class="other-reveal" data-other-for="topPriority">
+          <input type="text" name="topPriorityOther" placeholder="Please specify">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 11 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-grey">💭</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 11</div>
+          <div class="section-title">Open Feedback</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">Anything else leadership should know? <span class="hint" style="margin:0;">(optional)</span></label>
+        <textarea name="openFeedback" maxlength="800" data-counted></textarea>
+        <div class="char-counter"><span data-count-for="openFeedback">0</span>/800</div>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <div class="submit-title">Ready to Submit?</div>
+      <div class="submit-sub">Your responses feed directly into the Pharco rebrand — thank you for taking the time.</div>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span>Submit My Response</span>
+        <span class="btn-arrow">→</span>
+        <span class="spinner" id="spinner"></span>
+      </button>
+    </div>
+    <div class="footer-note">Pharco Brand Perception Survey · Internal use only</div>
+  </div>
+
+  <div class="success-panel" id="successPanel">
+    <div class="big">✅</div>
+    <h2>Thank you!</h2>
+    <p class="submit-sub">Your response has been recorded. It'll help shape where the Pharco brand goes next.</p>
+  </div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxvQI28nqesC6PQxXit1PKrrhpDKQ0eOx1rOSyPiUkFtqbkFVWSN04FeBXOr1A8pjYV/exec';
+
+  // ---------- build likert rows ----------
+  document.querySelectorAll('[data-likert-group]').forEach(function(container){
+    var items = JSON.parse(container.getAttribute('data-likert-group'));
+    items.forEach(function(item){
+      var parts = item.split(':');
+      var name = parts[0], label = parts.slice(1).join(':');
+      var row = document.createElement('div');
+      row.className = 'likert-row';
+      var scaleHtml = '';
+      for (var i=1;i<=5;i++){
+        scaleHtml += '<label class="likert-opt"><input type="radio" name="'+name+'" value="'+i+'" required></label>';
+      }
+      row.innerHTML = '<div class="lname">'+label+'</div><div class="likert-scale">'+scaleHtml+'</div>';
+      container.appendChild(row);
+    });
+  });
+
+  // ---------- build rank rows ----------
+  document.querySelectorAll('[data-rank-group]').forEach(function(container){
+    var items = JSON.parse(container.getAttribute('data-rank-group'));
+    items.forEach(function(pair){
+      var name = pair[0], label = pair[1];
+      var row = document.createElement('div');
+      row.className = 'rank-row';
+      var opts = '<option value="" disabled selected>Rank…</option>';
+      for (var i=1;i<=4;i++){ opts += '<option value="'+i+'">'+i+(i===1?' (biggest)':i===4?' (smallest)':'')+'</option>'; }
+      row.innerHTML = '<div class="lname">'+label+'</div><select name="'+name+'" required>'+opts+'</select>';
+      container.appendChild(row);
+    });
+  });
+
+  // ---------- pill groups ----------
+  document.querySelectorAll('[data-pill-group]').forEach(function(group){
+    var name = group.getAttribute('data-pill-group');
+    group.querySelectorAll('.radio-pill').forEach(function(pill){
+      pill.addEventListener('click', function(){
+        group.querySelectorAll('.radio-pill').forEach(function(p){ p.classList.remove('active'); });
+        pill.classList.add('active');
+        group.setAttribute('data-selected', pill.getAttribute('data-value'));
+        var reveal = document.querySelector('.other-reveal[data-other-for="'+name+'"]');
+        if (reveal) {
+          if (pill.getAttribute('data-other') === 'true') { reveal.classList.add('show'); }
+          else { reveal.classList.remove('show'); }
+        }
+      });
+    });
+  });
+
+  // ---------- char counters ----------
+  document.querySelectorAll('[data-counted]').forEach(function(ta){
+    var counter = document.querySelector('[data-count-for="'+ta.name+'"]');
+    ta.addEventListener('input', function(){ counter.textContent = ta.value.length; });
+  });
+
+  // ---------- progress bar via scroll ----------
+  var sections = Array.from(document.querySelectorAll('[data-section]'));
+  var fill = document.getElementById('progressFill');
+  var label = document.getElementById('progressLabel');
+  function updateProgress(){
+    var scrollY = window.scrollY + window.innerHeight * 0.35;
+    var current = 1;
+    sections.forEach(function(sec, idx){
+      if (sec.offsetTop <= scrollY) current = idx + 1;
+    });
+    fill.style.width = (current / sections.length * 100) + '%';
+    label.textContent = 'Section ' + current + ' of ' + sections.length;
+  }
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  // ---------- toast ----------
+  function showToast(msg, isError){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(function(){ t.className = 'toast'; }, 4000);
+  }
+
+  // ---------- submit ----------
+  var form = document.getElementById('surveyForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var spinner = document.getElementById('spinner');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // validate required pill groups
+    var requiredPills = document.querySelectorAll('[data-pill-group][data-required="true"]');
+    for (var i=0;i<requiredPills.length;i++){
+      if (!requiredPills[i].getAttribute('data-selected')){
+        showToast('Please answer all required questions before submitting.', true);
+        requiredPills[i].scrollIntoView({behavior:'smooth', block:'center'});
+        return;
+      }
+    }
+    if (!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+
+    var data = {};
+    new FormData(form).forEach(function(v,k){ data[k] = v; });
+    document.querySelectorAll('[data-pill-group]').forEach(function(group){
+      var name = group.getAttribute('data-pill-group');
+      data[name] = group.getAttribute('data-selected') || '';
+    });
+
+    submitBtn.disabled = true;
+    spinner.classList.add('show');
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    }).then(function(res){ return res.json(); })
+      .then(function(json){
+        spinner.classList.remove('show');
+        if (json && json.status === 'ok'){
+          document.getElementById('formArea').classList.add('hidden');
+          document.getElementById('successPanel').classList.add('show');
+          window.scrollTo({top:0, behavior:'smooth'});
+        } else {
+          submitBtn.disabled = false;
+          showToast('Something went wrong submitting your response. Please try again.', true);
+        }
+      })
+      .catch(function(){
+        spinner.classList.remove('show');
+        submitBtn.disabled = false;
+        showToast('Network error — please check your connection and try again.', true);
+      });
+  });
+</script>
+
+</body>
+</html>
