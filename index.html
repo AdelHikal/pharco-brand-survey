@@ -138,6 +138,7 @@
   .likert-opt input{ width:18px;height:18px;accent-color:var(--accent); cursor:pointer; }
   .likert-opt span{ font-size:10px; color:var(--muted); }
   .likert-endcaps{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:2px; }
+  .lexplain{ font-size:11px; color:var(--muted); font-weight:400; margin-top:3px; line-height:1.35; }
 
   /* rank grid */
   .rank-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); gap:14px; }
@@ -206,50 +207,14 @@
           <div class="section-title">About You</div>
         </div>
       </div>
-      <div class="grid-2">
-        <div class="field">
-          <label class="flabel">Which Pharco Group entity do you primarily work for? <span class="req">*</span></label>
-          <select name="entity" required>
-            <option value="" disabled selected>Choose…</option>
-            <option>Pharco (Corporate/HQ)</option>
-            <option>Amriya</option>
-            <option>PharcoB</option>
-            <option>EEPI</option>
-            <option>Techno</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="flabel">What is your seniority level? <span class="req">*</span></label>
-          <select name="seniority" required>
-            <option value="" disabled selected>Choose…</option>
-            <option>Specialist</option>
-            <option>Sr Specialist</option>
-            <option>Lead</option>
-            <option>Manager</option>
-            <option>Sr Manager</option>
-            <option>Director</option>
-            <option>Executive</option>
-          </select>
-        </div>
-      </div>
       <div class="field">
-        <label class="flabel">Which department best describes your role? <span class="req">*</span></label>
-        <select name="department" required>
+        <label class="flabel">Which Pharco entity do you primarily work for? <span class="req">*</span></label>
+        <select name="entity" required>
           <option value="" disabled selected>Choose…</option>
-          <option>Marketing</option>
-          <option>Sales & Commercial</option>
-          <option>Corporate Communications</option>
-          <option>HR & Talent</option>
-          <option>Regulatory Affairs</option>
-          <option>Medical & Scientific Affairs</option>
-          <option>Digital & E-commerce</option>
-          <option>Business Development & Export</option>
-          <option>Finance</option>
-          <option>Legal</option>
-          <option>IT</option>
-          <option>Executive Leadership</option>
-          <option>Other</option>
+          <option>CSC</option>
+          <option>PHC</option>
+          <option>CHC</option>
+          <option>OO & Export</option>
         </select>
       </div>
     </div>
@@ -264,8 +229,8 @@
           <div class="section-desc">Rate the following about Pharco's brand today</div>
         </div>
       </div>
-      <div class="likert" data-likert-group='["confidence:Confidence in it","consistency:Consistency","standsOut:Stands out from competitors","trustworthy:Trustworthy"]'></div>
-      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
+      <div class="likert" data-likert-group='["pbAwareness:Public Brand Awareness|Does it come to mind immediately compared to other pharma players?","perceivedQuality:Perceived Quality|Overall impression of product and service quality","trustworthiness:Trustworthiness|Confidence that Pharco delivers on its promises","valueForMoney:Value for Money|Fair value relative to the price paid","uniqueness:Uniqueness|Clearly stands out from competition","emotionalConnection:Emotional Connection|Feeling of positive emotional attachment to the brand","reputationCSR:Reputation / Social Responsibility|Standing as a responsible corporate citizen","loyaltyAdvocacy:Loyalty / Advocacy|Willingness to stay with and recommend Pharco"]'></div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Extremely so</span></div>
     </div>
 
     <!-- Section 3 -->
@@ -319,17 +284,8 @@
       <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
 
       <div class="section-desc" style="margin-bottom:8px;">Rate consistency across the company of:</div>
-      <div class="likert" data-likert-group='["consistLogo:Logo usage","consistColor:Color palette","consistTemplates:Templates (PPT, docs)","consistDigital:Digital & social assets"]'></div>
-      <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Very Inconsistent</span><span>5 · Very Consistent</span></div>
-
-      <div class="field">
-        <label class="flabel">Have you ever used a template or asset you weren't sure was current/correct? <span class="req">*</span></label>
-        <div class="pill-group" data-pill-group="usedUnsureAsset" data-required="true">
-          <div class="radio-pill" data-value="Yes">Yes</div>
-          <div class="radio-pill" data-value="No">No</div>
-          <div class="radio-pill" data-value="Not sure">Not sure</div>
-        </div>
-      </div>
+      <div class="likert" data-likert-group='["consistLogo:Logo usage","consistColor:Color palette","consistTemplates:Templates (PPT, docs)","consistDigital:Digital & social assets","consistTradeFairs:Trade fairs (Conferences) visibility","consistPackaging:Products packaging and design"]'></div>
+      <div class="likert-endcaps"><span>1 · Very Inconsistent</span><span>5 · Very Consistent</span></div>
     </div>
 
     <!-- Section 6 -->
@@ -400,16 +356,8 @@
       <div class="rank-grid" data-rank-group='[["rankUnclear","Unclear guidelines"],["rankInconsistent","Inconsistent branding across companies"],["rankSlow","Slow approvals"],["rankMissing","Missing templates"]]'></div>
 
       <div class="field" style="margin-top:20px;">
-        <div class="likert" data-likert-group='["approvalsFast:Approvals/sign-off on brand materials happen quickly enough."]'></div>
-        <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
-      </div>
-
-      <div class="field">
-        <label class="flabel">I've had to recreate a document from scratch because no usable template existed. <span class="req">*</span></label>
-        <div class="pill-group" data-pill-group="recreatedDoc" data-required="true">
-          <div class="radio-pill" data-value="Yes">Yes</div>
-          <div class="radio-pill" data-value="No">No</div>
-        </div>
+        <div class="likert" data-likert-group='["brandSupport:To what degree do you think creating a strong Pharco Corp Brand will support your business?"]'></div>
+        <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · To a great extent</span></div>
       </div>
 
       <div class="field">
@@ -431,21 +379,6 @@
       <div class="field">
         <label class="flabel">In three words, describe the brand you want Pharco to become. <span class="req">*</span></label>
         <input type="text" name="threeWords" placeholder="e.g. Bold, Trusted, Modern" required>
-      </div>
-      <div class="field">
-        <label class="flabel">If you had to pick ONE top priority for this rebrand, what would it be? <span class="req">*</span></label>
-        <div class="pill-group" data-pill-group="topPriority" data-required="true">
-          <div class="radio-pill" data-value="Unify visual identity">Unify visual identity</div>
-          <div class="radio-pill" data-value="Modernize look & feel">Modernize look &amp; feel</div>
-          <div class="radio-pill" data-value="Clarify positioning">Clarify positioning</div>
-          <div class="radio-pill" data-value="Simplify messaging">Simplify messaging</div>
-          <div class="radio-pill" data-value="Build usable guidelines">Build usable guidelines</div>
-          <div class="radio-pill" data-value="Improve internal comms">Improve internal comms</div>
-          <div class="radio-pill" data-value="Other" data-other="true">Other…</div>
-        </div>
-        <div class="other-reveal" data-other-for="topPriority">
-          <input type="text" name="topPriorityOther" placeholder="Please specify">
-        </div>
       </div>
     </div>
 
@@ -494,15 +427,19 @@
   document.querySelectorAll('[data-likert-group]').forEach(function(container){
     var items = JSON.parse(container.getAttribute('data-likert-group'));
     items.forEach(function(item){
-      var parts = item.split(':');
-      var name = parts[0], label = parts.slice(1).join(':');
+      var colonIdx = item.indexOf(':');
+      var name = item.substring(0, colonIdx);
+      var rest = item.substring(colonIdx + 1);
+      var pipeIdx = rest.indexOf('|');
+      var label = pipeIdx === -1 ? rest : rest.substring(0, pipeIdx);
+      var explain = pipeIdx === -1 ? '' : rest.substring(pipeIdx + 1);
       var row = document.createElement('div');
       row.className = 'likert-row';
       var scaleHtml = '';
       for (var i=1;i<=5;i++){
         scaleHtml += '<label class="likert-opt"><input type="radio" name="'+name+'" value="'+i+'" required></label>';
       }
-      row.innerHTML = '<div class="lname">'+label+'</div><div class="likert-scale">'+scaleHtml+'</div>';
+      row.innerHTML = '<div class="lname">'+label+(explain ? '<div class="lexplain">'+explain+'</div>' : '')+'</div><div class="likert-scale">'+scaleHtml+'</div>';
       container.appendChild(row);
     });
   });
