@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استبيان رأي المريض عن فارکو</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F4EF;
+    --ink:#0D0D0D;
+    --muted:#847C72;
+    --border:#D8D0C4;
+    --card:#FFFFFF;
+    --accent:#FFA400;
+    --accent-ink:#0D0D0D;
+    --grey2:#50494E;
+    --req:#C0442A;
+    --radius-card:20px;
+    --radius-input:12px;
+    --radius-pill:100px;
+    --shadow: 0 4px 24px rgba(13,13,13,.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Cairo',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+  h1,h2,h3{ font-family:'Cairo',sans-serif; font-weight:800; margin:0; }
+
+  .page-header{ background:var(--ink); padding:44px 40px 36px; }
+  .header-inner{ max-width:760px; margin:0 auto; }
+  .wordmark{ display:flex; align-items:center; gap:10px; margin-bottom:22px; direction:ltr; justify-content:flex-end; }
+  .wordmark .mark{ width:34px;height:34px;border-radius:9px;background:var(--accent); display:flex;align-items:center;justify-content:center; font-weight:800;color:var(--accent-ink);font-size:16px; }
+  .wordmark .name{ color:#fff;font-weight:800;font-size:18px;letter-spacing:.5px; }
+  .header-tag{ display:inline-flex;align-items:center;gap:8px; background:var(--accent); color:var(--accent-ink); border-radius:var(--radius-pill); padding:6px 14px; font-size:12px; font-weight:700; margin-bottom:18px; }
+  .header-tag .dot{width:5px;height:5px;border-radius:50%;background:var(--accent-ink);}
+  h1.title{ color:#fff; font-size:38px; line-height:1.3; margin-bottom:14px; }
+  h1.title .accent{ color:var(--accent); }
+  .header-sub{ color:rgba(255,255,255,.65); font-size:15px; font-weight:400; max-width:560px; margin-bottom:26px; }
+
+  .progress-bar-wrap{ height:6px;width:100%;background:rgba(255,255,255,.12);border-radius:100px;overflow:hidden; }
+  .progress-bar-fill{ height:100%;width:0%;background:var(--accent);border-radius:100px; transition:width .25s ease; }
+  .progress-label{ color:rgba(255,255,255,.55); font-size:12px; margin-top:10px; }
+
+  .form-wrap{ max-width:760px; margin:0 auto; padding:36px 20px 80px; }
+
+  .form-section{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow); padding:30px 32px 28px; margin-bottom:20px; scroll-margin-top:24px; }
+  .section-header{ display:flex; align-items:flex-start; gap:14px; margin-bottom:20px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+  .section-icon{ width:40px;height:40px;border-radius:10px; display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0; }
+  .icon-orange{ background:#FFE7BE; }
+  .icon-grey{ background:#E7E4E6; }
+  .icon-teal{ background:#DFF0EE; }
+  .icon-rust{ background:#FDECEA; }
+  .icon-purple{ background:#EFEAFB; }
+  .section-title-group{ padding-top:2px; }
+  .section-label{ color:var(--muted); font-size:11px; font-weight:700; margin-bottom:4px; }
+  .section-title{ font-size:20px; font-weight:800; }
+  .section-desc{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+  .field{ margin-bottom:20px; }
+  .field:last-child{ margin-bottom:0; }
+  label.flabel{ display:block; font-size:14px; font-weight:600; margin-bottom:8px; }
+  .req{ color:var(--req); }
+  .hint{ color:var(--muted); font-size:12px; margin-top:6px; font-weight:400; }
+
+  input[type=text], input[type=email], select, textarea{
+    width:100%; background:var(--bg); border:1.5px solid var(--border);
+    border-radius:var(--radius-input); padding:12px 14px; font-size:14px;
+    font-family:'Cairo',sans-serif; color:var(--ink); outline:none; text-align:right;
+  }
+  input[type=text]:focus, select:focus, textarea:focus{ border-color:var(--accent); }
+  textarea{ resize:vertical; min-height:90px; }
+  select{ appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23847C72' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat:no-repeat; background-position:left 14px center; padding-left:36px; padding-right:14px; }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:600px){ .grid-2{ grid-template-columns:1fr; } }
+
+  .char-counter{ text-align:left; color:var(--muted); font-size:11px; margin-top:4px; }
+
+  .pill-group{ display:flex; flex-wrap:wrap; gap:10px; }
+  .radio-pill{ background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-pill); padding:10px 18px; font-size:14px; cursor:pointer; user-select:none; transition:.15s; }
+  .radio-pill:hover{ border-color:var(--accent); }
+  .radio-pill.active{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .other-reveal{ margin-top:12px; display:none; }
+  .other-reveal.show{ display:block; }
+
+  .likert{ width:100%; }
+  .likert-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); gap:16px; }
+  .likert-row:last-child{ border-bottom:none; }
+  .likert-row .lname{ font-size:14px; flex:1; min-width:0; }
+  .likert-scale{ display:flex; gap:10px; flex-shrink:0; }
+  .likert-opt{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; }
+  .likert-opt input{ width:18px;height:18px;accent-color:var(--accent); cursor:pointer; }
+  .likert-opt span{ font-size:10px; color:var(--muted); }
+  .likert-endcaps{ display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:2px; }
+  .lexplain{ font-size:12px; color:var(--muted); font-weight:400; margin-top:3px; line-height:1.4; }
+
+  .submit-section{ text-align:center; padding:36px 20px 10px; }
+  .submit-title{ font-size:20px; font-weight:800; margin-bottom:8px; }
+  .submit-sub{ color:var(--muted); font-size:13px; margin-bottom:24px; }
+  .btn-submit{ background:var(--accent); color:var(--accent-ink); border:none; border-radius:var(--radius-pill); padding:16px 40px; font-size:15px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:10px; font-family:'Cairo',sans-serif; }
+  .btn-submit:disabled{ opacity:.6; cursor:default; }
+  .btn-arrow{ font-size:16px; }
+  .spinner{ width:14px;height:14px;border-radius:50%; border:2px solid rgba(13,13,13,.25); border-top-color:var(--accent-ink); animation:spin .7s linear infinite; display:none; }
+  .spinner.show{ display:inline-block; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:12px; margin-top:26px; }
+
+  .toast{ position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:14px 22px; border-radius:12px; font-size:14px; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:.25s; max-width:90vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.error{ background:#C0442A; }
+
+  #formArea.hidden{ display:none; }
+  .success-panel{ display:none; text-align:center; padding:80px 20px; }
+  .success-panel.show{ display:block; }
+  .success-panel .big{ font-size:44px; margin-bottom:14px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-inner">
+    <div class="wordmark">
+      <div class="mark">P</div>
+      <div class="name">PHARCO</div>
+    </div>
+    <div class="header-tag"><span class="dot"></span>استبيان رأي المريض</div>
+    <h1 class="title">رأيك يفرق.<br>قولنا <span class="accent">بصراحة.</span></h1>
+    <div class="header-sub">3-5 دقايق بس... رأيك في فارکو هيساعدنا نفهم إحنا واصلين للناس إزاي، وده هيبقى ليه تأثير كبير في قرارات جاية. إجاباتك سرية 100% ومش هتترتبط باسمك أبدًا.</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">القسم 1 من 6</div>
+  </div>
+</div>
+
+<div class="form-wrap">
+  <form id="surveyForm">
+  <div id="formArea">
+
+    <input type="hidden" name="formType" value="patient">
+
+    <!-- Section 1 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-orange">👤</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 1</div>
+          <div class="section-title">عنك انت شوية</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="flabel">بتاخد دوا بإستمرار ولا بس أحيانًا؟ <span class="req">*</span></label>
+          <select name="medicineUse" required>
+            <option value="" disabled selected>اختار...</option>
+            <option>باخد دوا لمرض مزمن بشكل يومي</option>
+            <option>باخد دوا بس لما اعيط (زي البرد أو الصداع)</option>
+            <option>نادرًا ما باخد أي دوا</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="flabel">سنك في حدود قد ايه؟ <span class="req">*</span></label>
+          <select name="ageRange" required>
+            <option value="" disabled selected>اختار...</option>
+            <option>تحت 18</option>
+            <option>18-30</option>
+            <option>31-45</option>
+            <option>46-60</option>
+            <option>فوق الـ60</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-teal">📊</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 2</div>
+          <div class="section-title">معرفتك بفارکو</div>
+          <div class="section-desc">قولنا رأيك في الحتت دي</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["brandRecall:اسم فارکو يوصلك بسرعة لما حد يقول اسم شركة أدوية مصرية","logoRecall:تقدر تتعرف على شكل علبة فارکو من غير ما تقرا الاسم","adRecall:شفت قبل كده إعلان أو بوست عن فارکو (تليفزيون، سوشيال ميديا، أو في الصيدلية)","trustBrand:فارکو باين انها شركة كبيرة وموثوق فيها","healthMission:حاسس إن فارکو هدفها فعلًا تساعد في صحة الناس مش بس تبيع دوا"]'></div>
+      <div class="likert-endcaps"><span>1 · خالص لأ</span><span>5 · أكيد جدًا</span></div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-rust">💊</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 3</div>
+          <div class="section-title">تجربتك مع منتجات فارکو</div>
+        </div>
+      </div>
+      <div class="likert" data-likert-group='["qualityFeel:حاسس إن جودة منتجات فارکو حلوة","trustEfficacy:مطمن إن الدوا هيجيب مفعوله زي ما المفروض","packagingClear:التغليف وطريقة الاستخدام واضحة وسهلة الفهم","priceValue:السعر مناسب لجودة المنتج"]'></div>
+      <div class="likert-endcaps"><span>1 · مش موافق خالص</span><span>5 · موافق تمامًا</span></div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-purple">🏪</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 4</div>
+          <div class="section-title">دور الصيدلي</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">لو الدكتور كتبلك دوا ومكانش موجود في الصيدلية، بتعمل ايه؟ <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="pharmacistChoice" data-required="true">
+          <div class="radio-pill" data-value="بسيب الاختيار للصيدلي">بسيب الاختيار للصيدلي</div>
+          <div class="radio-pill" data-value="بسأل لو فيه فارکو تحديدًا">بسأل لو فيه فارکو تحديدًا</div>
+          <div class="radio-pill" data-value="بسأل عن أرخص حاجة بس">بسأل عن أرخص حاجة بس</div>
+          <div class="radio-pill" data-value="مش فارق معايا خالص">مش فارق معايا خالص</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-teal">🎨</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 5</div>
+          <div class="section-title">الشكل والتغليف</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">لما تشوف علبة دوا فارکو، حاسس بايه؟ <span class="req">*</span></label>
+        <div class="pill-group" data-pill-group="packagingImpression" data-required="true">
+          <div class="radio-pill" data-value="شكل موثوق وطبي">شكل موثوق وطبي</div>
+          <div class="radio-pill" data-value="شكل عادي زي أي حاجة تانية">شكل عادي زي أي حاجة تانية</div>
+          <div class="radio-pill" data-value="شكل قديم محتاج تجديد">شكل قديم محتاج تجديد</div>
+          <div class="radio-pill" data-value="مش لاقيها مميزة عن غيرها">مش لاقيها مميزة عن غيرها</div>
+          <div class="radio-pill" data-value="Other" data-other="true">حاجة تانية...</div>
+        </div>
+        <div class="other-reveal" data-other-for="packagingImpression">
+          <input type="text" name="packagingImpressionOther" placeholder="قولنا ايه">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="form-section" data-section>
+      <div class="section-header">
+        <div class="section-icon icon-grey">💭</div>
+        <div class="section-title-group">
+          <div class="section-label">القسم 6</div>
+          <div class="section-title">رأيك الحر</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">لو هتوصف براند فارکو في 3 كلمات بس، هتقول ايه؟ <span class="req">*</span></label>
+        <input type="text" name="threeWords" placeholder="مثلا: موثوق، قريب مننا، تقيل" required>
+      </div>
+      <div class="field">
+        <label class="flabel">ايه أكتر حاجة تحب فارکو تحسنها عشان تكسب ثقتك اكتر؟ <span class="req">*</span></label>
+        <textarea name="improvement" maxlength="800" required data-counted></textarea>
+        <div class="char-counter"><span data-count-for="improvement">0</span>/800</div>
+      </div>
+      <div class="field">
+        <label class="flabel">في حاجة تانية حابب تقولها؟ <span class="hint" style="margin:0;">(اختياري)</span></label>
+        <textarea name="openFeedback" maxlength="800" data-counted></textarea>
+        <div class="char-counter"><span data-count-for="openFeedback">0</span>/800</div>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <div class="submit-title">جاهز تبعت رأيك؟</div>
+      <div class="submit-sub">رأيك هيفرق فعلًا في الطريقة اللي فارکو هتتعامل بيها مع المرضى. شكرًا لوقتك.</div>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span>ابعت رأيي</span>
+        <span class="btn-arrow">←</span>
+        <span class="spinner" id="spinner"></span>
+      </button>
+    </div>
+    <div class="footer-note">استبيان رأي المريض عن براند فارکو · للاستخدام الداخلي فقط</div>
+  </div>
+
+  <div class="success-panel" id="successPanel">
+    <div class="big">✅</div>
+    <h2>شكرًا ليك!</h2>
+    <p class="submit-sub">رأيك اتسجل. هيساعدنا نقرب اكتر من احتياجاتك.</p>
+  </div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxvQI28nqesC6PQxXit1PKrrhpDKQ0eOx1rOSyPiUkFtqbkFVWSN04FeBXOr1A8pjYV/exec';
+
+  document.querySelectorAll('[data-likert-group]').forEach(function(container){
+    var items = JSON.parse(container.getAttribute('data-likert-group'));
+    items.forEach(function(item){
+      var colonIdx = item.indexOf(':');
+      var name = item.substring(0, colonIdx);
+      var rest = item.substring(colonIdx + 1);
+      var pipeIdx = rest.indexOf('|');
+      var label = pipeIdx === -1 ? rest : rest.substring(0, pipeIdx);
+      var explain = pipeIdx === -1 ? '' : rest.substring(pipeIdx + 1);
+      var row = document.createElement('div');
+      row.className = 'likert-row';
+      var scaleHtml = '';
+      for (var i=1;i<=5;i++){
+        scaleHtml += '<label class="likert-opt"><input type="radio" name="'+name+'" value="'+i+'" required></label>';
+      }
+      row.innerHTML = '<div class="lname">'+label+(explain ? '<div class="lexplain">'+explain+'</div>' : '')+'</div><div class="likert-scale">'+scaleHtml+'</div>';
+      container.appendChild(row);
+    });
+  });
+
+  document.querySelectorAll('[data-rank-group]').forEach(function(container){
+    var items = JSON.parse(container.getAttribute('data-rank-group'));
+    items.forEach(function(pair){
+      var name = pair[0], label = pair[1];
+      var row = document.createElement('div');
+      row.className = 'rank-row';
+      var opts = '<option value="" disabled selected>رتب...</option>';
+      for (var i=1;i<=4;i++){ opts += '<option value="'+i+'">'+i+'</option>'; }
+      row.innerHTML = '<div class="lname">'+label+'</div><select name="'+name+'" required>'+opts+'</select>';
+      container.appendChild(row);
+    });
+  });
+
+  document.querySelectorAll('[data-pill-group]').forEach(function(group){
+    var name = group.getAttribute('data-pill-group');
+    group.querySelectorAll('.radio-pill').forEach(function(pill){
+      pill.addEventListener('click', function(){
+        group.querySelectorAll('.radio-pill').forEach(function(p){ p.classList.remove('active'); });
+        pill.classList.add('active');
+        group.setAttribute('data-selected', pill.getAttribute('data-value'));
+        var reveal = document.querySelector('.other-reveal[data-other-for="'+name+'"]');
+        if (reveal) {
+          if (pill.getAttribute('data-other') === 'true') { reveal.classList.add('show'); }
+          else { reveal.classList.remove('show'); }
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-counted]').forEach(function(ta){
+    var counter = document.querySelector('[data-count-for="'+ta.name+'"]');
+    ta.addEventListener('input', function(){ counter.textContent = ta.value.length; });
+  });
+
+  var sections = Array.from(document.querySelectorAll('[data-section]'));
+  var fill = document.getElementById('progressFill');
+  var label = document.getElementById('progressLabel');
+  function updateProgress(){
+    var scrollY = window.scrollY + window.innerHeight * 0.35;
+    var current = 1;
+    sections.forEach(function(sec, idx){
+      if (sec.offsetTop <= scrollY) current = idx + 1;
+    });
+    fill.style.width = (current / sections.length * 100) + '%';
+    label.textContent = 'القسم ' + current + ' من ' + sections.length;
+  }
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  function showToast(msg, isError){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(function(){ t.className = 'toast'; }, 4000);
+  }
+
+  var form = document.getElementById('surveyForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var spinner = document.getElementById('spinner');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    var requiredPills = document.querySelectorAll('[data-pill-group][data-required="true"]');
+    for (var i=0;i<requiredPills.length;i++){
+      if (!requiredPills[i].getAttribute('data-selected')){
+        showToast('من فضلك جاوب على كل الأسئلة المطلوبة قبل الإرسال.', true);
+        requiredPills[i].scrollIntoView({behavior:'smooth', block:'center'});
+        return;
+      }
+    }
+    if (!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+
+    var data = {};
+    new FormData(form).forEach(function(v,k){ data[k] = v; });
+    document.querySelectorAll('[data-pill-group]').forEach(function(group){
+      var name = group.getAttribute('data-pill-group');
+      data[name] = group.getAttribute('data-selected') || '';
+    });
+
+    submitBtn.disabled = true;
+    spinner.classList.add('show');
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    }).then(function(res){ return res.json(); })
+      .then(function(json){
+        spinner.classList.remove('show');
+        if (json && json.status === 'ok'){
+          document.getElementById('formArea').classList.add('hidden');
+          document.getElementById('successPanel').classList.add('show');
+          window.scrollTo({top:0, behavior:'smooth'});
+        } else {
+          submitBtn.disabled = false;
+          showToast('في مشكلة في إرسال ردك، حاول تاني.', true);
+        }
+      })
+      .catch(function(){
+        spinner.classList.remove('show');
+        submitBtn.disabled = false;
+        showToast('في مشكلة في النت — اتأكد من الاتصال وحاول تاني.', true);
+      });
+  });
+</script>
+
+</body>
+</html>
