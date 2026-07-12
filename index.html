@@ -117,7 +117,7 @@
 
   .char-counter{ text-align:right; color:var(--muted); font-size:11px; margin-top:4px; }
 
-  /* pill choice group (single-select) */
+  /* pill choice group (multi-select) */
   .pill-group{ display:flex; flex-wrap:wrap; gap:10px; }
   .radio-pill{
     background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-pill);
@@ -127,17 +127,19 @@
   .radio-pill.active{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700; }
   .other-reveal{ margin-top:12px; display:none; }
   .other-reveal.show{ display:block; }
+  .multi-hint{ color:var(--muted); font-weight:400; }
 
   /* likert grid */
   .likert{ width:100%; }
   .likert-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); gap:16px; }
   .likert-row:last-child{ border-bottom:none; }
   .likert-row .lname{ font-size:14px; flex:1; min-width:0; }
-  .likert-scale{ display:flex; gap:10px; flex-shrink:0; }
+  .likert-scale{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
   .likert-opt{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; }
   .likert-opt input{ width:18px;height:18px;accent-color:var(--accent); cursor:pointer; }
   .likert-opt span{ font-size:10px; color:var(--muted); }
-  .likert-endcaps{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:2px; }
+  .likert-opt.idk-opt{ margin-left:8px; padding-left:12px; border-left:1px solid var(--border); }
+  .likert-endcaps{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:2px; margin-bottom:2px; }
   .lexplain{ font-size:11px; color:var(--muted); font-weight:400; margin-top:3px; line-height:1.35; }
 
   /* rank grid */
@@ -207,15 +209,38 @@
           <div class="section-title">About You</div>
         </div>
       </div>
-      <div class="field">
-        <label class="flabel">Which Pharco entity do you primarily work for? <span class="req">*</span></label>
-        <select name="entity" required>
-          <option value="" disabled selected>Choose…</option>
-          <option>CSC</option>
-          <option>PHC</option>
-          <option>CHC</option>
-          <option>OO & Export</option>
-        </select>
+      <div class="grid-2">
+        <div class="field">
+          <label class="flabel">Which Pharco entity do you primarily work for? <span class="req">*</span></label>
+          <select name="entity" required>
+            <option value="" disabled selected>Choose…</option>
+            <option>Pharco (Corporate/HQ)</option>
+            <option>Amriya</option>
+            <option>PharcoB</option>
+            <option>EEPI</option>
+            <option>Techno</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="flabel">Which department best describes your role? <span class="req">*</span></label>
+          <select name="department" required>
+            <option value="" disabled selected>Choose…</option>
+            <option>Marketing</option>
+            <option>Sales & Commercial</option>
+            <option>Corporate Communications</option>
+            <option>HR & Talent</option>
+            <option>Regulatory Affairs</option>
+            <option>Medical & Scientific Affairs</option>
+            <option>Business Development</option>
+            <option>Export</option>
+            <option>Finance</option>
+            <option>Legal</option>
+            <option>IT</option>
+            <option>Executive Leadership</option>
+            <option>Other</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -229,7 +254,8 @@
           <div class="section-desc">Rate the following about Pharco's brand today</div>
         </div>
       </div>
-      <div class="likert" data-likert-group='["pbAwareness:Public Brand Awareness|Does it come to mind immediately compared to other pharma players?","perceivedQuality:Perceived Quality|Overall impression of product and service quality","trustworthiness:Trustworthiness|Confidence that Pharco delivers on its promises","valueForMoney:Value for Money|Fair value relative to the price paid","uniqueness:Uniqueness|Clearly stands out from competition","emotionalConnection:Emotional Connection|Feeling of positive emotional attachment to the brand","reputationCSR:Reputation / Social Responsibility|Standing as a responsible corporate citizen","loyaltyAdvocacy:Loyalty / Advocacy|Willingness to stay with and recommend Pharco"]'></div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Extremely so</span></div>
+      <div class="likert" data-likert-group='["perceivedQuality:Perceived Quality|Overall impression of product and service quality","trustworthiness:Trustworthiness|Confidence that Pharco delivers on its promises","valueForMoney:Value for Money|Fair value relative to the price paid","uniqueness:Uniqueness|Clearly stands out from competition","emotionalConnection:Emotional Connection|Feeling of positive emotional attachment to the brand","reputationCSR:Reputation / Social Responsibility|Standing as a responsible corporate citizen","loyaltyAdvocacy:Loyalty / Advocacy|Willingness to stay with and recommend Pharco"]'></div>
       <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Extremely so</span></div>
     </div>
 
@@ -243,7 +269,7 @@
         </div>
       </div>
       <div class="field">
-        <label class="flabel">How is Pharco currently positioned, in your view? <span class="req">*</span></label>
+        <label class="flabel">How is Pharco currently positioned, in your view? <span class="req">*</span> <span class="multi-hint">(select all that apply)</span></label>
         <div class="pill-group" data-pill-group="positioning" data-required="true">
           <div class="radio-pill" data-value="Affordable/generic option">Affordable/generic option</div>
           <div class="radio-pill" data-value="High-quality manufacturer">High-quality manufacturer</div>
@@ -267,6 +293,7 @@
           <div class="section-desc">Rate Pharco's current messaging</div>
         </div>
       </div>
+      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
       <div class="likert" data-likert-group='["msgClear:Clear","msgConsistent:Consistent across channels","msgEmotional:Emotionally engaging","msgCredible:Credible"]'></div>
       <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
     </div>
@@ -280,10 +307,12 @@
           <div class="section-title">Visual Identity</div>
         </div>
       </div>
+      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
       <div class="likert" data-likert-group='["knowLogo:I know the correct current logo, colors, and fonts to use for my entity."]'></div>
       <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
 
       <div class="section-desc" style="margin-bottom:8px;">Rate consistency across the company of:</div>
+      <div class="likert-endcaps"><span>1 · Very Inconsistent</span><span>5 · Very Consistent</span></div>
       <div class="likert" data-likert-group='["consistLogo:Logo usage","consistColor:Color palette","consistTemplates:Templates (PPT, docs)","consistDigital:Digital & social assets","consistTradeFairs:Trade fairs (Conferences) visibility","consistPackaging:Products packaging and design"]'></div>
       <div class="likert-endcaps"><span>1 · Very Inconsistent</span><span>5 · Very Consistent</span></div>
     </div>
@@ -297,11 +326,12 @@
           <div class="section-title">Brand Guidelines</div>
         </div>
       </div>
+      <div class="likert-endcaps"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
       <div class="likert" data-likert-group='["knowGuidelines:I know where to find our brand guidelines, and they&#39;re easy to use."]'></div>
       <div class="likert-endcaps" style="margin-bottom:18px;"><span>1 · Strongly Disagree</span><span>5 · Strongly Agree</span></div>
 
       <div class="field">
-        <label class="flabel">What brand resource are you missing most? <span class="req">*</span></label>
+        <label class="flabel">What brand resource are you missing most? <span class="req">*</span> <span class="multi-hint">(select all that apply)</span></label>
         <div class="pill-group" data-pill-group="missingResource" data-required="true">
           <div class="radio-pill" data-value="Logo/templates">Logo/templates</div>
           <div class="radio-pill" data-value="Tone-of-voice guide">Tone-of-voice guide</div>
@@ -325,6 +355,7 @@
           <div class="section-desc">Rate how much Pharco's communication currently sounds:</div>
         </div>
       </div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
       <div class="likert" data-likert-group='["soundProfessional:Professional","soundHuman:Human & warm","soundInnovative:Innovative","soundTrustworthy:Trustworthy"]'></div>
       <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
     </div>
@@ -339,6 +370,7 @@
           <div class="section-desc">Rate how clear and consistent brand communication is from:</div>
         </div>
       </div>
+      <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
       <div class="likert" data-likert-group='["clearMarketing:Marketing","clearSales:Sales","clearHR:HR","clearLeadership:Leadership"]'></div>
       <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · Very much so</span></div>
     </div>
@@ -356,6 +388,7 @@
       <div class="rank-grid" data-rank-group='[["rankUnclear","Unclear guidelines"],["rankInconsistent","Inconsistent branding across companies"],["rankSlow","Slow approvals"],["rankMissing","Missing templates"]]'></div>
 
       <div class="field" style="margin-top:20px;">
+        <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · To a great extent</span></div>
         <div class="likert" data-likert-group='["brandSupport:To what degree do you think creating a strong Pharco Corp Brand will support your business?"]'></div>
         <div class="likert-endcaps"><span>1 · Not at all</span><span>5 · To a great extent</span></div>
       </div>
@@ -392,7 +425,7 @@
         </div>
       </div>
       <div class="field">
-        <label class="flabel">Anything else leadership should know? <span class="hint" style="margin:0;">(optional)</span></label>
+        <label class="flabel">Do you have anything else you want to add regarding the current company branding? <span class="hint" style="margin:0;">(optional)</span></label>
         <textarea name="openFeedback" maxlength="800" data-counted></textarea>
         <div class="char-counter"><span data-count-for="openFeedback">0</span>/800</div>
       </div>
@@ -439,6 +472,7 @@
       for (var i=1;i<=5;i++){
         scaleHtml += '<label class="likert-opt"><input type="radio" name="'+name+'" value="'+i+'" required></label>';
       }
+      scaleHtml += '<label class="likert-opt idk-opt"><input type="radio" name="'+name+'" value="I don\'t know" required><span>N/A</span></label>';
       row.innerHTML = '<div class="lname">'+label+(explain ? '<div class="lexplain">'+explain+'</div>' : '')+'</div><div class="likert-scale">'+scaleHtml+'</div>';
       container.appendChild(row);
     });
@@ -458,17 +492,18 @@
     });
   });
 
-  // ---------- pill groups ----------
+  // ---------- pill groups (multi-select) ----------
   document.querySelectorAll('[data-pill-group]').forEach(function(group){
     var name = group.getAttribute('data-pill-group');
     group.querySelectorAll('.radio-pill').forEach(function(pill){
       pill.addEventListener('click', function(){
-        group.querySelectorAll('.radio-pill').forEach(function(p){ p.classList.remove('active'); });
-        pill.classList.add('active');
-        group.setAttribute('data-selected', pill.getAttribute('data-value'));
+        pill.classList.toggle('active');
+        var selected = Array.prototype.map.call(group.querySelectorAll('.radio-pill.active'), function(p){ return p.getAttribute('data-value'); });
+        group.setAttribute('data-selected', selected.join(', '));
         var reveal = document.querySelector('.other-reveal[data-other-for="'+name+'"]');
         if (reveal) {
-          if (pill.getAttribute('data-other') === 'true') { reveal.classList.add('show'); }
+          var otherActive = Array.prototype.some.call(group.querySelectorAll('.radio-pill.active'), function(p){ return p.getAttribute('data-other') === 'true'; });
+          if (otherActive) { reveal.classList.add('show'); }
           else { reveal.classList.remove('show'); }
         }
       });
