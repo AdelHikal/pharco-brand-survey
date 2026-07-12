@@ -178,6 +178,52 @@
   .success-panel{ display:none; text-align:center; padding:80px 20px; }
   .success-panel.show{ display:block; }
   .success-panel .big{ font-size:44px; margin-bottom:14px; }
+
+  /* ---------- Responsive ---------- */
+  html{ -webkit-text-size-adjust:100%; }
+  body{ overflow-x:hidden; }
+  img, svg{ max-width:100%; }
+
+  @media (max-width:900px){
+    .header-inner, .form-wrap{ max-width:100%; }
+  }
+
+  @media (max-width:640px){
+    .page-header{ padding:32px 20px 26px; }
+    h1.title{ font-size:30px; }
+    .header-sub{ font-size:14px; }
+    .header-tag{ font-size:10px; padding:5px 12px; }
+
+    .form-wrap{ padding:24px 14px 60px; }
+    .form-section{ padding:22px 18px 20px; border-radius:16px; }
+    .section-title{ font-size:18px; }
+    .section-icon{ width:34px; height:34px; font-size:16px; }
+
+    .grid-2{ grid-template-columns:1fr; gap:14px; }
+
+    /* stack likert rows on narrow screens so labels never get squeezed */
+    .likert-row{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .likert-row .lname{ width:100%; }
+    .likert-scale{ width:100%; justify-content:space-between; }
+    .likert-opt.idk-opt{ margin-left:0; padding-left:10px; }
+
+    .rank-row{ flex-direction:column; align-items:flex-start; gap:8px; }
+    .rank-row select{ width:100%; }
+
+    .pill-group{ gap:8px; }
+    .radio-pill{ padding:9px 14px; font-size:12.5px; }
+
+    .btn-submit{ width:100%; justify-content:center; padding:15px 20px; }
+    .submit-title{ font-size:18px; }
+
+    .likert-endcaps{ font-size:10.5px; }
+  }
+
+  @media (max-width:400px){
+    h1.title{ font-size:26px; }
+    .likert-scale{ gap:6px; }
+    .likert-opt input{ width:16px; height:16px; }
+  }
 </style>
 </head>
 <body>
@@ -209,20 +255,7 @@
           <div class="section-title">About You</div>
         </div>
       </div>
-      <div class="grid-2">
-        <div class="field">
-          <label class="flabel">Which Pharco entity do you primarily work for? <span class="req">*</span></label>
-          <select name="entity" required>
-            <option value="" disabled selected>Choose…</option>
-            <option>Pharco (Corporate/HQ)</option>
-            <option>Amriya</option>
-            <option>PharcoB</option>
-            <option>EEPI</option>
-            <option>Techno</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
+      <div class="field">
           <label class="flabel">Which department best describes your role? <span class="req">*</span></label>
           <select name="department" required>
             <option value="" disabled selected>Choose…</option>
@@ -240,7 +273,6 @@
             <option>Executive Leadership</option>
             <option>Other</option>
           </select>
-        </div>
       </div>
     </div>
 
