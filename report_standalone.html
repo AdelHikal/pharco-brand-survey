@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharco Brand Perception Survey — Analysis Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+  :root{
+    color-scheme: light;
+    --dark:#231A12;
+    --dark2:#2E2013;
+    --orange:#E8871E;
+    --cream:#FFFFFF;
+    --muted:#6B6259;
+    --card:#F7F4F0;
+    --good:#3F8F6B;
+    --bad:#C0473A;
+    --brown:#8A6D3B;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:var(--cream); color:var(--dark); font-family:Calibri,Arial,sans-serif; height:100%; }
+  #app{ display:flex; height:100vh; overflow:hidden; }
+
+  /* ---------- Sidebar ---------- */
+  #sidebar{
+    width:250px; min-width:250px; background:var(--dark); color:#D8CFC3;
+    display:flex; flex-direction:column; padding:22px 0; overflow-y:auto;
+  }
+  #sidebar .brand{ padding:0 20px 18px; font-weight:bold; font-size:13px; letter-spacing:2px; color:var(--orange); border-bottom:1px solid #3a2c1c; margin-bottom:10px; }
+  .nav-group-label{ padding:14px 20px 6px; font-size:10.5px; letter-spacing:1.5px; color:#8A7B69; text-transform:uppercase; }
+  .nav-item{
+    padding:9px 20px; cursor:pointer; font-size:13.5px; color:#D8CFC3;
+    border-left:3px solid transparent; transition:background .15s;
+  }
+  .nav-item:hover{ background:#2E2013; }
+  .nav-item.active{ background:#2E2013; border-left:3px solid var(--orange); color:#fff; font-weight:bold; }
+
+  /* ---------- Main ---------- */
+  #main{ flex:1; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  #slideWrap{ flex:1; overflow-y:auto; }
+  .slide{ display:none; min-height:100%; padding:56px 64px 100px; }
+  .slide.active{ display:block; animation:fadein .25s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .kicker{ color:var(--orange); font-weight:bold; font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+  .kicker.on-dark{ color:var(--orange); }
+  h1.slide-title{ font-family: Cambria, Georgia, serif; font-size:32px; margin:0 0 18px; color:var(--dark); font-weight:bold; }
+  h1.slide-title.on-dark{ color:#fff; }
+  .lede{ font-size:15.5px; color:var(--dark); line-height:1.5; max-width:900px; margin-bottom:28px; }
+  .lede.on-dark{ color:#D8CFC3; }
+  .caption{ font-size:12.5px; color:var(--muted); font-style:italic; margin-top:18px; }
+
+  /* dark full-bleed slides */
+  .slide.dark{ background:var(--dark); color:#fff; margin:-56px -64px -100px; padding:56px 64px 100px; min-height:calc(100vh); }
+
+  /* stat cards */
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:10px; }
+  .stat-card{ background:var(--card); border-radius:12px; padding:22px 18px; box-shadow:0 3px 10px rgba(0,0,0,.06); }
+  .stat-num{ font-family:Cambria,Georgia,serif; font-size:32px; font-weight:bold; margin-bottom:10px; }
+  .stat-label{ font-size:13px; color:var(--muted); line-height:1.35; }
+
+  /* two-col wins/risks */
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:8px; }
+  .col-header{ border-radius:8px; padding:12px 16px; color:#fff; font-weight:bold; text-align:center; font-size:15px; margin-bottom:14px; }
+  .item-card{ background:var(--card); border-radius:10px; padding:14px 18px; margin-bottom:12px; }
+  .item-card b{ display:block; font-size:14px; margin-bottom:4px; }
+  .item-card span{ font-size:12.5px; color:var(--muted); }
+
+  /* numbered priorities */
+  .priority{ display:flex; align-items:flex-start; gap:16px; margin-bottom:22px; }
+  .priority .num{ flex:0 0 auto; width:44px; height:44px; border-radius:50%; background:var(--orange); color:#fff; display:flex; align-items:center; justify-content:center; font-family:Cambria,serif; font-weight:bold; font-size:18px; }
+  .priority b{ display:block; font-size:15px; margin-bottom:3px; }
+  .priority span{ font-size:13px; color:var(--muted); }
+
+  /* charts */
+  .chart-box{ background:#fff; border-radius:10px; padding:10px; }
+  .chart-row{ display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:8px; }
+  .chart-title{ font-size:14px; font-weight:bold; margin-bottom:10px; }
+  canvas{ max-width:100%; }
+
+  /* table */
+  table.dept{ width:100%; border-collapse:collapse; margin-top:10px; }
+  table.dept th{ background:var(--dark); color:#fff; text-align:left; padding:10px 14px; font-size:13px; }
+  table.dept td{ padding:9px 14px; font-size:13.5px; border-bottom:1px solid #eee; }
+  table.dept tr:nth-child(even) td{ background:var(--card); }
+
+  /* theme cards + quotes */
+  .theme-row{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:8px; }
+  .theme-bar{ background:var(--card); border-radius:8px; padding:14px 18px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+  .theme-bar b{ font-size:13.5px; }
+  .theme-bar .pct{ font-family:Cambria,serif; font-size:20px; font-weight:bold; color:var(--orange); }
+  .quote-card{ background:var(--dark); color:#fff; border-radius:10px; padding:16px 20px; margin-bottom:14px; font-style:italic; font-family:Cambria,Georgia,serif; font-size:14px; line-height:1.5; }
+
+  /* word cloud */
+  .word-cloud{ display:flex; flex-wrap:wrap; gap:22px 34px; align-items:center; justify-content:center; padding:40px 20px; }
+  .word-cloud span{ font-family:Cambria,Georgia,serif; font-weight:bold; }
+
+  /* appendix rows */
+  .appendix-row{ display:grid; grid-template-columns:220px 1fr; gap:24px; padding:16px 0; border-bottom:1px solid #3a2c1c; }
+  .appendix-row b{ color:var(--orange); font-size:13.5px; }
+  .appendix-row p{ margin:0; font-size:13.5px; color:#D8CFC3; line-height:1.5; }
+
+  /* footer nav */
+  #footerNav{
+    position:sticky; bottom:0; background:rgba(255,255,255,.96); border-top:1px solid #eee;
+    display:flex; align-items:center; justify-content:space-between; padding:12px 64px; backdrop-filter:blur(4px);
+  }
+  #footerNav.dark-footer{ background:rgba(35,26,18,.96); border-top:1px solid #3a2c1c; }
+  .nav-btn{ background:var(--dark); color:#fff; border:none; border-radius:6px; padding:9px 18px; font-size:13px; cursor:pointer; font-family:Calibri,Arial,sans-serif; }
+  .nav-btn:disabled{ opacity:.35; cursor:default; }
+  .nav-btn.ghost{ background:transparent; color:var(--dark); border:1px solid #ccc; }
+  #progress{ font-size:12.5px; color:var(--muted); }
+
+  /* title & closing slide visuals */
+  .hero-circle{ position:absolute; border-radius:50%; background:#2E2013; z-index:0; }
+  .hero-content{ position:relative; z-index:1; }
+  .hero-title{ font-family:Cambria,Georgia,serif; font-size:44px; font-weight:bold; margin:14px 0 10px; }
+  .hero-sub{ font-size:17px; color:#D8CFC3; margin-bottom:6px; }
+  .hero-meta{ font-size:12.5px; color:#9C8F7F; margin-top:40px; }
+
+  #ghBadge{ position:fixed; top:14px; right:18px; z-index:50; font-size:11px; color:#9C8F7F; background:rgba(35,26,18,.85); padding:6px 12px; border-radius:20px; }
+  #ghBadge a{ color:var(--orange); text-decoration:none; }
+
+  @media (max-width: 900px){
+    #sidebar{ display:none; }
+    .slide{ padding:32px 24px 90px; }
+    .stat-grid, .two-col, .chart-row, .theme-row{ grid-template-columns:1fr; }
+    #footerNav{ padding:10px 20px; }
+    #ghBadge{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <nav id="sidebar">
+    <div class="brand">PHARCO SURVEY</div>
+    <div class="nav-group-label">Executive Summary</div>
+    <div class="nav-item" data-i="0">Cover</div>
+    <div class="nav-item" data-i="1">Headline Snapshot</div>
+    <div class="nav-item" data-i="2">Wins &amp; Risks</div>
+    <div class="nav-item" data-i="3">Five Priorities</div>
+    <div class="nav-group-label">Deep Dive</div>
+    <div class="nav-item" data-i="4">Section Divider</div>
+    <div class="nav-item" data-i="5">Core Brand Perception</div>
+    <div class="nav-item" data-i="6">Messaging &amp; Tone</div>
+    <div class="nav-item" data-i="7">Positioning &amp; Resources</div>
+    <div class="nav-item" data-i="8">Obstacles Ranking</div>
+    <div class="nav-item" data-i="9">Department Breakdown</div>
+    <div class="nav-item" data-i="10">Qualitative Themes</div>
+    <div class="nav-item" data-i="11">Aspiration Words</div>
+    <div class="nav-group-label">Appendix</div>
+    <div class="nav-item" data-i="12">Methodology &amp; Notes</div>
+    <div class="nav-item" data-i="13">Thank You</div>
+  </nav>
+
+  <main id="main">
+    <div id="slideWrap">
+
+      <!-- 0: COVER -->
+      <section class="slide dark" data-slide="0">
+        <div class="hero-circle" style="width:420px;height:420px;top:-140px;right:-80px;"></div>
+        <div class="hero-circle" style="width:230px;height:230px;bottom:60px;right:120px;background:rgba(232,135,30,.12);"></div>
+        <div class="hero-content" style="max-width:760px;padding-top:60px;">
+          <div class="kicker on-dark">BRAND PERCEPTION SURVEY</div>
+          <div class="hero-title">Shape the Brand. Share the Voice.</div>
+          <div class="hero-sub">Internal (Employee) Channel — Results &amp; Recommendations</div>
+          <div class="hero-meta">Prepared for Pharco Leadership · September 2026 · n = 243 responses</div>
+        </div>
+      </section>
+
+      <!-- 1: HEADLINE SNAPSHOT -->
+      <section class="slide" data-slide="1">
+        <div class="kicker">Executive Summary</div>
+        <h1 class="slide-title">Trusted and good value — but seen as generic, and slowed by process</h1>
+        <div class="lede">Employees consistently rate Pharco as trustworthy, high quality, and good value for money. But the brand is still widely perceived as an &ldquo;affordable/generic&rdquo; player rather than the innovator its people want it to become — and internal approval bottlenecks are the #1 obstacle to fixing it.</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-num" style="color:var(--orange)">3.89 / 5</div><div class="stat-label">Overall core brand perception score</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--bad)">62%</div><div class="stat-label">Still see Pharco as &ldquo;affordable / generic&rdquo;</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--bad)">22.6%</div><div class="stat-label">Cite slow approvals as the #1 branding obstacle</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--good)">4.48 / 5</div><div class="stat-label">Believe a strong brand directly supports the business</div></div>
+        </div>
+        <div class="caption">Scope note: internal/employee respondents only — external doctor, pharmacist, and patient data collection has not yet produced real responses.</div>
+      </section>
+
+      <!-- 2: WINS & RISKS -->
+      <section class="slide" data-slide="2">
+        <div class="kicker">Executive Summary</div>
+        <h1 class="slide-title">Three wins to protect, three risks to fix</h1>
+        <div class="two-col">
+          <div>
+            <div class="col-header" style="background:var(--good)">WINS TO PROTECT</div>
+            <div class="item-card"><b>Value for Money</b><span>4.24 / 5 — employees believe Pharco delivers fair value</span></div>
+            <div class="item-card"><b>Perceived Quality</b><span>4.10 / 5 — strong confidence in product &amp; service quality</span></div>
+            <div class="item-card"><b>Brand Supports the Business</b><span>4.48 / 5 — the single highest-rated item in the survey</span></div>
+          </div>
+          <div>
+            <div class="col-header" style="background:var(--bad)">RISKS TO FIX</div>
+            <div class="item-card"><b>Approval bottlenecks</b><span>Slow sign-off is the #1 cited obstacle (22.6% rank it biggest)</span></div>
+            <div class="item-card"><b>Inconsistent execution</b><span>32% of open comments cite inconsistency across Group entities</span></div>
+            <div class="item-card"><b>Innovation perception gap</b><span>&ldquo;Innovative&rdquo; is the lowest tone score (3.26) yet the 2nd most-wanted future brand word</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: FIVE PRIORITIES -->
+      <section class="slide" data-slide="3">
+        <div class="kicker">Executive Summary</div>
+        <h1 class="slide-title">Five priorities for the next quarter</h1>
+        <div class="priority"><div class="num">1</div><div><b>Fix the approval bottleneck</b><span>Streamline sign-off workflow for brand materials — the fastest, most concrete win available.</span></div></div>
+        <div class="priority"><div class="num">2</div><div><b>Unify execution across Group entities</b><span>One shared guideline system with clear governance — inconsistency is the #1 qualitative theme (32%).</span></div></div>
+        <div class="priority"><div class="num">3</div><div><b>Reposition deliberately</b><span>Quality and trust scores are strong (4.1 / 4.0) but 62% still see &ldquo;affordable/generic&rdquo; — message toward quality &amp; innovation.</span></div></div>
+        <div class="priority"><div class="num">4</div><div><b>Close the innovation perception gap</b><span>Invest in visible proof points (R&amp;D, digital, new formats) — &ldquo;Innovative&rdquo; is the lowest tone score.</span></div></div>
+        <div class="priority"><div class="num">5</div><div><b>Re-engage Marketing &amp; Medical/Scientific Affairs</b><span>These functions rate the brand most critically despite owning its execution and credibility.</span></div></div>
+      </section>
+
+      <!-- 4: SECTION DIVIDER -->
+      <section class="slide dark" data-slide="4">
+        <div class="hero-circle" style="width:340px;height:340px;bottom:-140px;left:-100px;"></div>
+        <div class="hero-content" style="padding-top:140px;max-width:760px;">
+          <div class="kicker on-dark">PART TWO</div>
+          <div class="hero-title" style="font-size:38px;">Deep Dive: Detailed Findings</div>
+          <div class="hero-sub">Quantitative scores, obstacle rankings, department cross-cuts, and verbatim themes</div>
+        </div>
+      </section>
+
+      <!-- 5: CORE BRAND PERCEPTION -->
+      <section class="slide" data-slide="5">
+        <div class="kicker">Deep Dive · Quantitative</div>
+        <h1 class="slide-title">Core brand perception (1–5 scale)</h1>
+        <div class="chart-box"><canvas id="chartCore" height="90"></canvas></div>
+        <div class="caption">Uniqueness is the clear laggard — Pharco is trusted and good value, but not yet distinctive.</div>
+      </section>
+
+      <!-- 6: MESSAGING & TONE -->
+      <section class="slide" data-slide="6">
+        <div class="kicker">Deep Dive · Quantitative</div>
+        <h1 class="slide-title">Messaging quality &amp; tone of voice</h1>
+        <div class="chart-row">
+          <div><div class="chart-title">Messaging Quality</div><div class="chart-box"><canvas id="chartMsg" height="220"></canvas></div></div>
+          <div><div class="chart-title">Tone of Voice</div><div class="chart-box"><canvas id="chartTone" height="220"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- 7: POSITIONING & RESOURCES -->
+      <section class="slide" data-slide="7">
+        <div class="kicker">Deep Dive · Quantitative</div>
+        <h1 class="slide-title">How Pharco is positioned today (multi-select)</h1>
+        <div class="chart-row">
+          <div><div class="chart-title">Current positioning</div><div class="chart-box"><canvas id="chartPos" height="220"></canvas></div></div>
+          <div><div class="chart-title">Brand resource missing most</div><div class="chart-box"><canvas id="chartRes" height="220"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- 8: OBSTACLES -->
+      <section class="slide" data-slide="8">
+        <div class="kicker">Deep Dive · Quantitative</div>
+        <h1 class="slide-title">Biggest obstacles to consistent branding</h1>
+        <div class="chart-box"><canvas id="chartObstacles" height="120"></canvas></div>
+        <div class="caption">% of respondents who ranked each obstacle #1 (biggest) out of four options.</div>
+      </section>
+
+      <!-- 9: DEPARTMENT BREAKDOWN -->
+      <section class="slide" data-slide="9">
+        <div class="kicker">Deep Dive · Quantitative</div>
+        <h1 class="slide-title">Brand score by department</h1>
+        <table class="dept">
+          <tr><th>Department</th><th>Respondents</th><th>Avg. score</th></tr>
+          <tr><td>Sales &amp; Commercial</td><td>123</td><td>4.10</td></tr>
+          <tr><td>Other</td><td>32</td><td>3.78</td></tr>
+          <tr><td>Marketing</td><td>29</td><td>3.68</td></tr>
+          <tr><td>Medical &amp; Scientific Affairs</td><td>12</td><td>3.37</td></tr>
+          <tr><td>Business Development</td><td>7</td><td>4.47</td></tr>
+          <tr><td>Executive Leadership</td><td>7</td><td>3.92</td></tr>
+          <tr><td>Finance</td><td>7</td><td>3.72</td></tr>
+          <tr><td>HR &amp; Talent</td><td>7</td><td>3.47</td></tr>
+          <tr><td>IT</td><td>5</td><td>3.66</td></tr>
+        </table>
+        <div class="caption">Sales &amp; Commercial (51% of respondents) rates the brand most favorably. Marketing and Medical/Scientific Affairs — closest to brand execution &amp; scientific credibility — are more critical.</div>
+      </section>
+
+      <!-- 10: QUALITATIVE THEMES -->
+      <section class="slide" data-slide="10">
+        <div class="kicker">Deep Dive · Qualitative</div>
+        <h1 class="slide-title">What employees say is holding branding back</h1>
+        <div class="theme-row">
+          <div>
+            <div class="theme-bar"><b>Inconsistency across entities / departments</b><span class="pct">32%</span></div>
+            <div class="theme-bar"><b>Leadership &amp; top-down communication</b><span class="pct">23%</span></div>
+            <div class="theme-bar"><b>Unclear guidelines / positioning</b><span class="pct">18%</span></div>
+            <div class="theme-bar"><b>Approval process speed</b><span class="pct">12%</span></div>
+          </div>
+          <div>
+            <div class="quote-card">&ldquo;Every division has their own mindset and direction in branding which is a problem with overlapping specialties.&rdquo;</div>
+            <div class="quote-card">&ldquo;Lack of unified brand execution across different departments and communication channels.&rdquo;</div>
+            <div class="quote-card">&ldquo;Too much change in short time. One big change then consistency is better.&rdquo;</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11: ASPIRATION WORDS -->
+      <section class="slide" data-slide="11">
+        <div class="kicker">Deep Dive · Qualitative</div>
+        <h1 class="slide-title">The brand employees want to become</h1>
+        <div class="word-cloud">
+          <span style="font-size:46px;color:var(--orange)">Trusted</span>
+          <span style="font-size:32px;color:var(--dark)">Innovative</span>
+          <span style="font-size:26px;color:var(--brown)">Modern</span>
+          <span style="font-size:20px;color:var(--good)">Quality</span>
+          <span style="font-size:18px;color:var(--orange)">Bold</span>
+          <span style="font-size:16px;color:var(--good)">Consistent</span>
+          <span style="font-size:16px;color:var(--brown)">Affordable</span>
+          <span style="font-size:15px;color:var(--dark)">Global</span>
+          <span style="font-size:14px;color:var(--orange)">Effective</span>
+          <span style="font-size:14px;color:var(--dark)">Patient-centric</span>
+          <span style="font-size:14px;color:var(--brown)">Inspiring</span>
+          <span style="font-size:14px;color:var(--good)">Reliable</span>
+        </div>
+        <div class="caption" style="text-align:center;">Word frequency from open-text &ldquo;three words for the future brand&rdquo; responses (n = 242). Size reflects mention count.</div>
+      </section>
+
+      <!-- 12: APPENDIX -->
+      <section class="slide dark" data-slide="12">
+        <div class="kicker on-dark">Appendix</div>
+        <h1 class="slide-title on-dark">Methodology &amp; data notes</h1>
+        <div class="appendix-row"><b>Survey window</b><p>243 real responses, 14 Jul – 9 Sep 2026. No new responses since 9 Sep — recommend re-promoting internally.</p></div>
+        <div class="appendix-row"><b>Audience scope</b><p>Internal/employee channel only. Companion Doctor, Pharmacist, and Patient surveys have not yet collected real external responses (QA test rows only).</p></div>
+        <div class="appendix-row"><b>Respondent mix</b><p>Sales &amp; Commercial = 51% of respondents (123/243). Overall averages skew toward this group; see department breakdown (tab 9).</p></div>
+        <div class="appendix-row"><b>Data reconciliation</b><p>The response sheet's header row had drifted out of sync with the live form after several schema updates. The true field-to-column mapping was reverse-engineered and verified by content pattern-matching before analysis. Recommend relabeling the sheet header to match the current question order.</p></div>
+        <div class="appendix-row"><b>Last updated</b><p id="lastUpdated">27 September 2026</p></div>
+      </section>
+
+      <!-- 13: CLOSING -->
+      <section class="slide dark" data-slide="13">
+        <div class="hero-circle" style="width:230px;height:230px;top:-80px;left:-80px;"></div>
+        <div class="hero-content" style="padding-top:160px;max-width:760px;">
+          <div class="hero-title" style="font-size:38px;">Thank you</div>
+          <div class="hero-sub">This report regenerates automatically every Sunday at 10:30 AM as new responses arrive.</div>
+          <div class="hero-meta">adelhikal.github.io/pharco-brand-survey/report/</div>
+        </div>
+      </section>
+
+    </div>
+
+    <div id="footerNav">
+      <button class="nav-btn ghost" id="prevBtn">&larr; Previous</button>
+      <span id="progress">1 / 14</span>
+      <button class="nav-btn" id="nextBtn">Next &rarr;</button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var slides = Array.from(document.querySelectorAll('.slide'));
+  var navItems = Array.from(document.querySelectorAll('.nav-item'));
+  var footer = document.getElementById('footerNav');
+  var current = 0;
+  var chartsBuilt = false;
+
+  function darkSlide(i){ return slides[i].classList.contains('dark'); }
+
+  function show(i){
+    if(i<0) i=0; if(i>slides.length-1) i=slides.length-1;
+    current = i;
+    slides.forEach(function(s,idx){ s.classList.toggle('active', idx===i); });
+    navItems.forEach(function(n){ n.classList.toggle('active', parseInt(n.dataset.i,10)===i); });
+    document.getElementById('progress').textContent = (i+1)+' / '+slides.length;
+    document.getElementById('prevBtn').disabled = i===0;
+    document.getElementById('nextBtn').disabled = i===slides.length-1;
+    footer.classList.toggle('dark-footer', darkSlide(i));
+    document.getElementById('slideWrap').scrollTop = 0;
+    if(i===5 || i===6 || i===7 || i===8){ buildCharts(); }
+  }
+
+  navItems.forEach(function(n){
+    n.addEventListener('click', function(){ show(parseInt(n.dataset.i,10)); });
+  });
+  document.getElementById('prevBtn').addEventListener('click', function(){ show(current-1); });
+  document.getElementById('nextBtn').addEventListener('click', function(){ show(current+1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight' || e.key===' '){ show(current+1); }
+    if(e.key==='ArrowLeft'){ show(current-1); }
+  });
+
+  var ORANGE='#E8871E', BAD='#C0473A', DARK='#231A12', GOOD='#3F8F6B', BROWN='#8A6D3B';
+  function baseOpts(extra){
+    return Object.assign({
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{enabled:true} },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ color:'#6B6259', font:{size:11} } },
+        y:{ grid:{ color:'#eee' }, ticks:{ color:'#6B6259', font:{size:11} } }
+      }
+    }, extra||{});
+  }
+
+  function buildCharts(){
+    if(chartsBuilt) return; chartsBuilt = true;
+
+    new Chart(document.getElementById('chartCore'), {
+      type:'bar',
+      data:{ labels:[['Value for','Money'],['Perceived','Quality'],['Trust-','worthiness'],['Reputation','/ CSR'],['Loyalty /','Advocacy'],['Emotional','Connection'],'Uniqueness'],
+        datasets:[{ data:[4.24,4.10,4.02,4.00,3.88,3.72,3.46], backgroundColor:ORANGE, borderRadius:4 }] },
+      options: baseOpts({ scales:{ x:{grid:{display:false},ticks:{color:'#6B6259',font:{size:11}}}, y:{min:0,max:5,grid:{color:'#eee'},ticks:{color:'#6B6259'}} } })
+    });
+
+    new Chart(document.getElementById('chartMsg'), {
+      type:'bar',
+      data:{ labels:[['Consistent','across channels'],['Emotionally','engaging'],'Clear','Credible'],
+        datasets:[{ data:[3.56,3.58,3.70,3.78], backgroundColor:ORANGE, borderRadius:4 }] },
+      options: baseOpts({ indexAxis:'y', scales:{ x:{min:0,max:5,grid:{color:'#eee'},ticks:{color:'#6B6259'}}, y:{grid:{display:false},ticks:{color:'#6B6259'}} } })
+    });
+
+    new Chart(document.getElementById('chartTone'), {
+      type:'bar',
+      data:{ labels:['Innovative','Human & warm','Professional','Trustworthy'],
+        datasets:[{ data:[3.26,3.59,3.71,3.76], backgroundColor:BAD, borderRadius:4 }] },
+      options: baseOpts({ indexAxis:'y', scales:{ x:{min:0,max:5,grid:{color:'#eee'},ticks:{color:'#6B6259'}}, y:{grid:{display:false},ticks:{color:'#6B6259'}} } })
+    });
+
+    new Chart(document.getElementById('chartPos'), {
+      type:'bar',
+      data:{ labels:[['Affordable /','generic'],['High-quality','manufacturer'],['Innovator &','health-equity'],['No clear','positioning'],'Other'],
+        datasets:[{ data:[62,49,15,6,1], backgroundColor:ORANGE, borderRadius:4 }] },
+      options: baseOpts({ scales:{ x:{grid:{display:false},ticks:{color:'#6B6259'}}, y:{min:0,max:70,grid:{color:'#eee'},ticks:{color:'#6B6259',callback:function(v){return v+'%';}}} } })
+    });
+
+    new Chart(document.getElementById('chartRes'), {
+      type:'bar',
+      data:{ labels:[['Clear approval','process'],['Tone-of-voice','guide'],['Nothing','missing'],['Logo /','templates'],'Other'],
+        datasets:[{ data:[41,31,29,21,7], backgroundColor:BROWN, borderRadius:4 }] },
+      options: baseOpts({ indexAxis:'y', scales:{ x:{min:0,max:50,grid:{color:'#eee'},ticks:{color:'#6B6259',callback:function(v){return v+'%';}}}, y:{grid:{display:false},ticks:{color:'#6B6259'}} } })
+    });
+
+    new Chart(document.getElementById('chartObstacles'), {
+      type:'bar',
+      data:{ labels:['Missing templates',['Inconsistent branding','across companies'],'Unclear guidelines','Slow approvals'],
+        datasets:[{ data:[9.5,14.4,19.8,22.6], backgroundColor:BAD, borderRadius:4 }] },
+      options: baseOpts({ indexAxis:'y', scales:{ x:{min:0,max:26,grid:{color:'#eee'},ticks:{color:'#6B6259',callback:function(v){return v+'%';}}}, y:{grid:{display:false},ticks:{color:DARK,font:{size:13}}} } })
+    });
+  }
+
+  show(0);
+})();
+</script>
+</body>
+</html>
